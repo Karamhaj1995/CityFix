@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title%}Karam Test{% end %}
+{% block content %}
+<div class="lg-content">
+
+    <div class="lg-form">
+        <input id="username" type="text" name="Username" placeholder="اسم المستخدم" />
+        <input id="password" type="password" name="Password" placeholder="كلمة المرور" />
+        <button id="register">سجل</button>
+    </div>
+
+</div>
+
+{% block js %}
+
+<script>
+
+    $(document).ready(function(){
+
+    });
+
+    $('#register').on('click', function(){
+        $.ajax({
+        	type: "POST",
+        	url: 'api/v1/users',
+        	data: {"name":$('#username').val(), "password": $('#password').val()},
+        	success: function(){
+        		window.location.replace('/login')
+        	},
+        	error: function(){
+        		console.log('error ya 5ra')
+        	}
+        });
+    });
+
+</script>
+
+{% end %}
+
+{% end %}
