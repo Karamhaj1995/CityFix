@@ -21,7 +21,7 @@ def main():
     args = sys.argv
     tornado.options.parse_command_line(args)
     console_server = tornado.httpserver.HTTPServer(ConsoleApplication())
-    console_server.listen(8888)
+    console_server.listen(80, '*')
     tornado.ioloop.IOLoop.current().start()
 
 
