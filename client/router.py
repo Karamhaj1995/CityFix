@@ -1,7 +1,7 @@
-from client.handlers.starter import MainHandler, LoginHandler, RegisterHandler
-from client.handlers.profile import ProfileHandler
-from client.handlers.users import Api as UserAPI
-from client.handlers.hazards import Api as HazardsAPI
+from handlers.starter import MainHandler, LoginHandler, RegisterHandler
+from handlers.profile import ProfileHandler
+from handlers.users import Api as UserAPI
+from handlers.hazards import Api as HazardsAPI
 urls = [
 		# web-pagging
 		(r"/", MainHandler),
