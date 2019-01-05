@@ -12,47 +12,12 @@ def connect_to_database():
 	try:
 		connect(db_config['dbname'], host=db_config['connection'], port=int(db_config['port']),username=db_config['dbusername'],password=db_config['dbpassword'])
 	except:
-		print("Problem to connect Ekron DB.")
+		print("Unable to connect.")
 	print("Connect to database was successful.")
 
 connect_to_database()
 
-class History(EmbeddedDocument):
-	timestamp = DateTimeField(default=datetime.datetime.now())
-	remote_ip = StringField()
-	username = StringField()
-	description = DictField()
-
-class EkronBaseDocument(Document):
-	
-	modified = DateTimeField()
-	created = DateTimeField(default=datetime.datetime.now())
-	protected = BooleanField(default=False,required=True)
-	history = EmbeddedDocumentListField(History)
-	remote_ip = StringField()
-	username = StringField()
-	meta = {'abstract': True}
-
-	def commit(self,new=False):
-
-		if len(self._get_changed_fields()) == 0:
-			if new:
-				self.history.append(History(username=self.username,remote_ip=self.remote_ip,description={'Action':'Object Created'},timestamp=datetime.datetime.now()))
-				self.save()
-			return None
-		changes = {}
-		for change_field in self._get_changed_fields():
-			changes[change_field] = str(self[change_field])
-		self.history.append(History(username=self.username,remote_ip=self.remote_ip,description=changes,timestamp=datetime.datetime.now()))
-		self.save()
-
-	def __repr__(self):
-		output = {}
-		for f in self._fields_ordered:
-				output[f] = getattr(self,f)
-		return  str(output)
-
-class User(EkronBaseDocument):
+class User(Document):
 	name = StringField(required=True)
 	password = StringField(required=True)
 	salt_key = 'rWxHp4CBC8h0SiPY3gPKIGbed14bBCsj0VK8RQrrmKqa0ZveQvXNd7MI2twENvVJHq7vdYJHWPhLq5ONA8nr6bbZenANIrynBUEVbMHpMud3K8iUSAanfKTZ'
@@ -70,7 +35,7 @@ class User(EkronBaseDocument):
 	def change_password(self, password):
 		self.password = sha512(self.salt_key.encode()+password.encode()).hexdigest() + ':' + self.salt_key
 
-class Hazard(EkronBaseDocument):
+class Hazard(Document):
 	title = StringField()
 	description = StringField()
 	location = ReferenceField('Location')
