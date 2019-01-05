@@ -45,7 +45,7 @@ class Hazard(Document):
 	user = ReferenceField('User')
 	meta = {'collection': 'Hazards'}
 
-class Location(EkronBaseDocument):
+class Location(Document):
 	Lat = StringField(required=True)
 	Lng = StringField(required=True)
 	FullAddress = StringField(default='')
