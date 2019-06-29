@@ -11,8 +11,7 @@ class Api(tornado.web.RequestHandler):
 		data = convert_arguments(self.request.arguments)
 		hazards = []
 		if data.get('limit',None) is not None:
-			self.write(HazardManager().hazards(int(data['limit'])).to_json())
-			return
+			return self.write(HazardManager().hazards(int(data['limit'])).to_json())
 		for hazard in HazardManager().hazards():
 			hazard['lat'] = hazard['location']['Lat']
 			hazard['lng'] = hazard['location']['Lng']
@@ -31,7 +30,6 @@ class Api(tornado.web.RequestHandler):
 	def delete(self):
 		try:
 			data = convert_arguments(self.request.arguments)
-			print('wewewew')
 			self.write(HazardManager().delete_hazard(data['id']).to_json())
 		except Exception as e:
 			self.write(dict(error=e))
